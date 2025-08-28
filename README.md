@@ -1,6 +1,6 @@
-# JJType - Typing Speed Test
+# jj-Typing - Typing Speed Test
 
-A React-based typing speed test application inspired by [MonkeyType](https://monkeytype.com).
+A React-based typing speed test application I made as a side project.
 
 ## Features
 
