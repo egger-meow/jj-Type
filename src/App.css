@@ -6,10 +6,11 @@
 }
 
 body {
-  background-color: #323437;
-  color: #d1d0c5;
+  background: linear-gradient(var(--bg-gradient-angle, 180deg), var(--bg-gradient-from, var(--bg-color)), var(--bg-gradient-to, var(--bg-color)));
+  color: var(--text-color);
   font-family: 'JetBrains Mono', monospace;
   overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .App {
@@ -21,21 +22,21 @@ body {
 .app-header {
   text-align: center;
   padding: 2rem 0 1rem 0;
-  border-bottom: 1px solid #646669;
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 1rem;
 }
 
 .app-title {
   font-size: 3rem;
   font-weight: 600;
-  color: #e2b714;
+  color: var(--primary-color);
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
 }
 
 .app-subtitle {
   font-size: 1.125rem;
-  color: #646669;
+  color: var(--text-secondary);
   font-weight: 400;
 }
 
@@ -49,9 +50,9 @@ main {
 .app-footer {
   text-align: center;
   padding: 1rem;
-  border-top: 1px solid #646669;
+  border-top: 1px solid var(--border-color);
   font-size: 0.875rem;
-  color: #646669;
+  color: var(--text-secondary);
 }
 
 /* Scrollbar Styling */
@@ -60,12 +61,18 @@ main {
 }
 
 ::-webkit-scrollbar-track {
-  background: #2c2e31;
+  background: var(--scrollbar-track, var(--surface-color));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #646669;
+  background: var(--scrollbar-thumb, var(--border-color));
   border-radius: 4px;
+}
+
+/* Text Selection */
+::selection {
+  background: var(--selection-bg, rgba(226, 183, 20, 0.25));
+  color: var(--selection-text, var(--text-color));
 }
 
 ::-webkit-scrollbar-thumb:hover {

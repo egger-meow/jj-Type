@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TypingTest from './components/TypingTest';
+import ThemeSelector from './components/ThemeSelector';
+import { getStoredTheme, getTheme } from './utils/themes';
 import './App.css';
 
 function App() {
+  const [currentTheme, setCurrentTheme] = useState(getStoredTheme());
+
   useEffect(() => {
     // Add keyboard shortcuts
     const handleKeyDown = (e) => {
-      // Tab + Enter to restart (when test is completed)
+      // Tab + Enter for restart (when test is completed)
       if (e.key === 'Tab' && e.ctrlKey) {
         e.preventDefault();
         window.location.reload();
@@ -20,11 +24,29 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    // Apply theme to document root
+    const themeData = getTheme(currentTheme);
+    const root = document.documentElement;
+    
+    Object.entries(themeData.colors).forEach(([property, value]) => {
+      root.style.setProperty(`--${property.replace(/([A-Z])/g, '-$1').toLowerCase()}`, value);
+    });
+  }, [currentTheme]);
+
+  const handleThemeChange = (themeKey) => {
+    setCurrentTheme(themeKey);
+  };
+
   return (
     <div className="App">
       <header className="app-header">
         <h1 className="app-title">JJType</h1>
         <p className="app-subtitle">Test your typing speed</p>
+        <ThemeSelector 
+          currentTheme={currentTheme} 
+          onThemeChange={handleThemeChange} 
+        />
       </header>
       <main>
         <TypingTest />

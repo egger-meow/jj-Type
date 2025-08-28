@@ -1,16 +1,46 @@
 /* TypingTest.css */
+:root {
+  /* Dark theme (default) */
+  --bg-color: #323437;
+  --surface-color: #2c2e31;
+  --primary-color: #e2b714;
+  --text-color: #d1d0c5;
+  --text-secondary: #646669;
+  --correct-color: #d1d0c5;
+  --incorrect-color: #ca4754;
+  --current-color: #e2b714;
+  --border-color: #646669;
+  --border-hover: #d1d0c5;
+  --input-bg: #2c2e31;
+  --input-focus: #323437;
+  --button-bg: transparent;
+  --button-active: rgba(226, 183, 20, 0.1);
+  --restart-btn: #e2b714;
+  --restart-btn-hover: #d4a50d;
+  /* New defaults for global theming */
+  --bg-gradient-from: #2d2f32;
+  --bg-gradient-to: #373a3e;
+  --bg-gradient-angle: 180deg;
+  --scrollbar-track: #2c2e31;
+  --scrollbar-thumb: #646669;
+  --selection-bg: rgba(226, 183, 20, 0.25);
+  --selection-text: #d1d0c5;
+  --shadow-color: rgba(0, 0, 0, 0.35);
+}
+
 .typing-test {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #323437;
-  color: #d1d0c5;
+  background: transparent;
+  color: var(--text-color);
   font-family: 'JetBrains Mono', monospace;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   outline: none;
+  transition: color 0.3s ease;
 }
 
 .test-header {
@@ -31,7 +61,7 @@
 
 .timer-label {
   font-size: 0.875rem;
-  color: #646669;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 500;
 }
@@ -39,7 +69,7 @@
 .timer-value {
   font-size: 2rem;
   font-weight: 600;
-  color: #e2b714;
+  color: var(--primary-color);
 }
 
 .stats {
@@ -57,12 +87,12 @@
 .stat-value {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #e2b714;
+  color: var(--primary-color);
 }
 
 .stat-label {
   font-size: 0.875rem;
-  color: #646669;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 500;
 }
@@ -73,9 +103,9 @@
 }
 
 .test-config button {
-  background: transparent;
-  border: 2px solid #646669;
-  color: #646669;
+  background: var(--button-bg);
+  border: 2px solid var(--border-color);
+  color: var(--border-color);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-family: inherit;
@@ -85,14 +115,14 @@
 }
 
 .test-config button:hover {
-  border-color: #d1d0c5;
-  color: #d1d0c5;
+  border-color: var(--border-hover);
+  color: var(--border-hover);
 }
 
 .test-config button.active {
-  border-color: #e2b714;
-  color: #e2b714;
-  background-color: rgba(226, 183, 20, 0.1);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: var(--button-active);
 }
 
 .test-config button:disabled {
@@ -104,30 +134,20 @@
   font-size: 1.5rem;
   line-height: 2;
   margin-bottom: 1rem;
-  padding: 2rem;
-  background-color: #2c2e31;
-  border-radius: 1rem;
-  border: 2px solid #646669;
+  padding: 0;
+  background: transparent;
+  border: none;
   max-height: 300px;
   overflow-y: auto;
   position: relative;
   cursor: text;
-  transition: border-color 0.2s ease;
-}
-
-.text-display:hover {
-  border-color: #d1d0c5;
-}
-
-.text-display:focus-within {
-  border-color: #e2b714;
 }
 
 .typing-cursor {
   position: absolute;
   width: 2px;
   height: 2rem;
-  background-color: #e2b714;
+  background-color: var(--current-color);
   animation: cursorBlink 1s infinite;
   margin-left: 2px;
 }
@@ -142,25 +162,25 @@
 }
 
 .char.correct {
-  color: #d1d0c5;
+  color: var(--correct-color);
   background-color: transparent;
 }
 
 .char.incorrect {
-  color: #ca4754;
+  color: var(--incorrect-color);
   background-color: rgba(202, 71, 84, 0.3);
   border-radius: 2px;
 }
 
 .char.current {
-  background-color: #e2b714;
-  color: #323437;
+  background-color: var(--current-color);
+  color: var(--bg-color);
   border-radius: 2px;
   animation: blink 1s infinite;
 }
 
 .char.pending {
-  color: #646669;
+  color: var(--text-secondary);
 }
 
 @keyframes blink {
@@ -175,21 +195,21 @@
 
 .typing-input {
   width: 100%;
-  max-width: 600px;
-  padding: 1rem;
+  max-width: 700px;
+  padding: 0.75rem 0;
   font-size: 1.125rem;
   font-family: inherit;
-  background-color: #2c2e31;
-  border: 2px solid #646669;
-  border-radius: 0.5rem;
-  color: #d1d0c5;
-  transition: border-color 0.2s ease;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-color);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .typing-input:focus {
   outline: none;
-  border-color: #e2b714;
-  background-color: #323437;
+  border-bottom-color: var(--primary-color);
+  background: transparent;
 }
 
 .typing-input:disabled {
@@ -198,20 +218,20 @@
 }
 
 .typing-input::placeholder {
-  color: #646669;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
 .input-label {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: #646669;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
 .instructions {
   text-align: center;
-  color: #646669;
+  color: var(--text-secondary);
   font-size: 1.125rem;
   margin-top: 2rem;
   animation: fadeIn 0.5s ease-in;
@@ -240,7 +260,7 @@
 }
 
 .results h2 {
-  color: #e2b714;
+  color: var(--primary-color);
   font-size: 2rem;
   margin-bottom: 2rem;
   font-weight: 600;
@@ -252,9 +272,9 @@
   gap: 2rem;
   margin-bottom: 2rem;
   padding: 2rem;
-  background-color: #2c2e31;
+  background-color: var(--surface-color);
   border-radius: 1rem;
-  border: 2px solid #646669;
+  border: 2px solid var(--border-color);
 }
 
 .final-stat {
@@ -267,20 +287,20 @@
 .final-stat-value {
   font-size: 2.5rem;
   font-weight: 600;
-  color: #e2b714;
+  color: var(--primary-color);
 }
 
 .final-stat-label {
   font-size: 1rem;
-  color: #646669;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 500;
 }
 
 .restart-btn {
-  background: #e2b714;
+  background: var(--restart-btn);
   border: none;
-  color: #323437;
+  color: var(--bg-color);
   padding: 1rem 2rem;
   border-radius: 0.5rem;
   font-family: inherit;
@@ -291,7 +311,7 @@
 }
 
 .restart-btn:hover {
-  background: #d4a50d;
+  background: var(--restart-btn-hover);
   transform: translateY(-2px);
 }
 
