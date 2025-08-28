@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  outline: none;
 }
 
 .test-header {
@@ -102,7 +103,7 @@
 .text-display {
   font-size: 1.5rem;
   line-height: 2;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 2rem;
   background-color: #2c2e31;
   border-radius: 1rem;
@@ -110,6 +111,30 @@
   max-height: 300px;
   overflow-y: auto;
   position: relative;
+  cursor: text;
+  transition: border-color 0.2s ease;
+}
+
+.text-display:hover {
+  border-color: #d1d0c5;
+}
+
+.text-display:focus-within {
+  border-color: #e2b714;
+}
+
+.typing-cursor {
+  position: absolute;
+  width: 2px;
+  height: 2rem;
+  background-color: #e2b714;
+  animation: cursorBlink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 .char {
@@ -143,10 +168,45 @@
   51%, 100% { opacity: 0.3; }
 }
 
+.input-area {
+  margin: 2rem 0;
+  text-align: center;
+}
+
 .typing-input {
-  position: absolute;
-  left: -9999px;
-  opacity: 0;
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem;
+  font-size: 1.125rem;
+  font-family: inherit;
+  background-color: #2c2e31;
+  border: 2px solid #646669;
+  border-radius: 0.5rem;
+  color: #d1d0c5;
+  transition: border-color 0.2s ease;
+}
+
+.typing-input:focus {
+  outline: none;
+  border-color: #e2b714;
+  background-color: #323437;
+}
+
+.typing-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.typing-input::placeholder {
+  color: #646669;
+  font-style: italic;
+}
+
+.input-label {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #646669;
+  font-style: italic;
 }
 
 .instructions {

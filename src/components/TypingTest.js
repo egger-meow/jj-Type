@@ -133,6 +133,28 @@ const TypingTest = () => {
     if (e.key === 'Backspace' && userInput.length === 0) {
       e.preventDefault();
     }
+    
+    // Handle Tab + Enter for restart
+    if (e.key === 'Tab' && e.shiftKey && isTestCompleted) {
+      e.preventDefault();
+      resetTest();
+    }
+  };
+
+  const handleContainerClick = () => {
+    if (inputRef.current && !isTestCompleted) {
+      inputRef.current.focus();
+    }
+  };
+
+  const handleContainerKeyDown = (e) => {
+    if (!isTestCompleted && inputRef.current) {
+      inputRef.current.focus();
+      // Forward the key event to the input
+      if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Space') {
+        // Let the input handle the key naturally
+      }
+    }
   };
 
   const getCharacterClass = (index) => {
@@ -156,7 +178,12 @@ const TypingTest = () => {
   };
 
   return (
-    <div className="typing-test">
+    <div 
+      className="typing-test"
+      onClick={handleContainerClick}
+      onKeyDown={handleContainerKeyDown}
+      tabIndex={0}
+    >
       <div className="test-header">
         <div className="timer">
           <span className="timer-label">time</span>
@@ -206,21 +233,33 @@ const TypingTest = () => {
         </div>
       </div>
 
-      <div className="text-display">
+      <div className="text-display" onClick={handleContainerClick}>
         {renderText()}
+        <div className="typing-cursor" style={{ display: isTestCompleted ? 'none' : 'block' }}></div>
       </div>
 
-      <input
-        ref={inputRef}
-        type="text"
-        value={userInput}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        className="typing-input"
-        placeholder={isTestCompleted ? "Test completed! Press Tab + Enter to restart" : "Start typing to begin the test..."}
-        disabled={isTestCompleted}
-        autoFocus
-      />
+      <div className="input-area">
+        <input
+          ref={inputRef}
+          type="text"
+          value={userInput}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          className="typing-input"
+          placeholder={isTestCompleted ? "Test completed! Press Shift+Tab to restart" : "Click here or start typing..."}
+          disabled={isTestCompleted}
+          autoFocus
+          spellCheck={false}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+        />
+        <div className="input-label">
+          {!testStarted && !isTestCompleted && "Click here and start typing"}
+          {testStarted && !isTestCompleted && "Keep typing..."}
+          {isTestCompleted && "Test completed! Press Shift+Tab to restart"}
+        </div>
+      </div>
 
       {isTestCompleted && (
         <div className="results">
