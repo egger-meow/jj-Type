@@ -1,4 +1,4 @@
-# jj-Typing - Typing Speed Test
+# jj-Type - Typing Speed Test
 
 A React-based typing speed test application I made as a side project.
 

@@ -41,7 +41,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1 className="app-title">JJType</h1>
+        <h1 className="app-title">jj-Type</h1>
         <p className="app-subtitle">Test your typing speed</p>
         <ThemeSelector 
           currentTheme={currentTheme} 
