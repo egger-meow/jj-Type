@@ -97,12 +97,26 @@
   font-weight: 500;
 }
 
-.test-config {
+.test-config,
+.difficulty-config {
   display: flex;
   gap: 0.5rem;
 }
 
-.test-config button {
+/* Group time and difficulty controls together */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Add slight separation between time and difficulty groups */
+.controls .difficulty-config {
+  margin-left: 0.5rem;
+}
+
+.test-config button,
+.difficulty-config button {
   background: var(--button-bg);
   border: 2px solid var(--border-color);
   color: var(--border-color);
@@ -114,18 +128,21 @@
   transition: all 0.2s ease;
 }
 
-.test-config button:hover {
+.test-config button:hover,
+.difficulty-config button:hover {
   border-color: var(--border-hover);
   color: var(--border-hover);
 }
 
-.test-config button.active {
+.test-config button.active,
+.difficulty-config button.active {
   border-color: var(--primary-color);
   color: var(--primary-color);
   background-color: var(--button-active);
 }
 
-.test-config button:disabled {
+.test-config button:disabled,
+.difficulty-config button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -317,6 +334,37 @@
 
 .restart-btn:active {
   transform: translateY(0);
+}
+
+/* Accessibility Additions */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px; /* Hide it far off-screen */
+  left: 1rem;
+  background: var(--primary-color);
+  color: var(--bg-color);
+  padding: 0.5rem 1rem;
+  z-index: 9999;
+  transition: top 0.3s ease-in-out;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* Responsive Design */

@@ -15,9 +15,13 @@ const TypingTest = () => {
   const [correctChars, setCorrectChars] = useState(0);
   const [incorrectChars, setIncorrectChars] = useState(0);
   const [isTestCompleted, setIsTestCompleted] = useState(false);
+  const [difficulty, setDifficulty] = useState('easy');
   
   const inputRef = useRef(null);
   const intervalRef = useRef(null);
+  const announcementRef = useRef(null);
+  const skipLinkRef = useRef(null);
+  const resultsRef = useRef(null);
 
   // Initialize test
   useEffect(() => {
@@ -58,8 +62,22 @@ const TypingTest = () => {
     }
   }, [correctChars, incorrectChars, timeLeft, testDuration, testStarted]);
 
+  useEffect(() => {
+    if (isTestCompleted && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [isTestCompleted]);
+
+  useEffect(() => {
+    // Only regenerate when changing difficulty BEFORE the test starts
+    if (!testStarted && !isTestCompleted) {
+      const newText = generateText(150, difficulty);
+      setText(newText);
+    }
+  }, [difficulty, testStarted, isTestCompleted]);
+
   const resetTest = useCallback(() => {
-    const newText = generateText(150);
+    const newText = generateText(150, difficulty);
     setText(newText);
     setUserInput('');
     setCurrentCharIndex(0);
@@ -78,7 +96,7 @@ const TypingTest = () => {
         inputRef.current.focus();
       }
     }, 100);
-  }, [testDuration]);
+  }, [testDuration, difficulty]);
 
   const startTest = () => {
     if (!testStarted) {
@@ -90,6 +108,10 @@ const TypingTest = () => {
   const finishTest = () => {
     setIsTestActive(false);
     setIsTestCompleted(true);
+    // Announce completion to screen readers
+    if (announcementRef.current) {
+      announcementRef.current.textContent = `Test completed! You achieved ${wpm} WPM with ${accuracy}% accuracy.`;
+    }
   };
 
   const handleInputChange = (e) => {
@@ -178,12 +200,44 @@ const TypingTest = () => {
   };
 
   return (
-    <div 
-      className="typing-test"
-      onClick={handleContainerClick}
-      onKeyDown={handleContainerKeyDown}
-      tabIndex={0}
-    >
+    <>
+      {/* Skip link for accessibility */}
+      <a 
+        href="#main-content"
+        className="skip-link"
+        ref={skipLinkRef}
+        onFocus={() => {
+          if (skipLinkRef.current) {
+            skipLinkRef.current.style.top = '0';
+          }
+        }}
+        onBlur={() => {
+          if (skipLinkRef.current) {
+            skipLinkRef.current.style.top = '-40px';
+          }
+        }}
+      >
+        Skip to main content
+      </a>
+      
+      {/* Screen reader announcements */}
+      <div 
+        ref={announcementRef}
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        role="status"
+      ></div>
+      
+      <div 
+        className="typing-test"
+        onClick={handleContainerClick}
+        onKeyDown={handleContainerKeyDown}
+        tabIndex={0}
+        role="main"
+        aria-label="Typing speed test"
+        id="main-content"
+      >
       <div className="test-header">
         <div className="timer">
           <span className="timer-label">time</span>
@@ -192,44 +246,78 @@ const TypingTest = () => {
         
         <div className="stats">
           <div className="stat">
-            <span className="stat-value">{wpm}</span>
-            <span className="stat-label">wpm</span>
-          </div>
-          <div className="stat">
             <span className="stat-value">{accuracy}%</span>
             <span className="stat-label">acc</span>
           </div>
         </div>
 
-        <div className="test-config">
-          <button 
-            className={testDuration === 15 ? 'active' : ''}
-            onClick={() => setTestDuration(15)}
-            disabled={isTestActive}
-          >
-            15s
-          </button>
-          <button 
-            className={testDuration === 30 ? 'active' : ''}
-            onClick={() => setTestDuration(30)}
-            disabled={isTestActive}
-          >
-            30s
-          </button>
-          <button 
-            className={testDuration === 60 ? 'active' : ''}
-            onClick={() => setTestDuration(60)}
-            disabled={isTestActive}
-          >
-            60s
-          </button>
-          <button 
-            className={testDuration === 120 ? 'active' : ''}
-            onClick={() => setTestDuration(120)}
-            disabled={isTestActive}
-          >
-            2m
-          </button>
+        <div className="controls">
+          <div className="test-config">
+            <button 
+              className={testDuration === 15 ? 'active' : ''}
+              onClick={() => {
+                setTestDuration(15);
+                setTimeLeft(15);
+              }}
+              disabled={isTestActive}
+            >
+              15s
+            </button>
+            <button 
+              className={testDuration === 30 ? 'active' : ''}
+              onClick={() => {
+                setTestDuration(30);
+                setTimeLeft(30);
+              }}
+              disabled={isTestActive}
+            >
+              30s
+            </button>
+            <button 
+              className={testDuration === 60 ? 'active' : ''}
+              onClick={() => {
+                setTestDuration(60);
+                setTimeLeft(60);
+              }}
+              disabled={isTestActive}
+            >
+              60s
+            </button>
+            <button 
+              className={testDuration === 120 ? 'active' : ''}
+              onClick={() => {
+                setTestDuration(120);
+                setTimeLeft(120);
+              }}
+              disabled={isTestActive}
+            >
+              2m
+            </button>
+          </div>
+
+          <div className="difficulty-config">
+            <button 
+              className={difficulty === 'easy' ? 'active' : ''}
+              onClick={() => setDifficulty('easy')}
+              disabled={isTestActive}
+            >
+              Easy
+            </button>
+            <button 
+              className={difficulty === 'medium' ? 'active' : ''}
+              onClick={() => setDifficulty('medium')}
+              disabled={isTestActive}
+            >
+              Medium
+            </button>
+            <button 
+              className={difficulty === 'hard' ? 'active' : ''}
+              onClick={() => setDifficulty('hard')}
+              disabled={isTestActive}
+            >
+              Hard
+            </button>
+          </div>
         </div>
       </div>
 
@@ -262,7 +350,7 @@ const TypingTest = () => {
       </div>
 
       {isTestCompleted && (
-        <div className="results">
+        <div ref={resultsRef} className="results">
           <h2>Test Complete!</h2>
           <div className="final-stats">
             <div className="final-stat">
@@ -294,6 +382,7 @@ const TypingTest = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
